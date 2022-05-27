@@ -18,7 +18,7 @@ DS18B20Events thermometer(0);
 void setup() {	
 	Serial.begin(115200);
 	DS18B20Events::setup(&dallasTemperature); // Link DS18B20Events to DallasTemperature object
-	DS18B20Events::setInterval(5000); // Set min interval in milliseconds between 2 measurements. Default 10000 set in setup() method.
+	DS18B20Events::setInterval(5000, 30000); // Set min and max interval in milliseconds between 2 measurements. Default 10000 set in setup() method.
 	
 	// subscribe to temperature changed event
 	thermometer.onChange = temperatureChanged;
