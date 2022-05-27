@@ -26,7 +26,7 @@ uint8_t DS18B20Events::getIndex()
 {
 	return _index;
 }
-void DS18B20Events::setInterval(unsigned long value, unsigned long valueMax)
+void DS18B20Events::setInterval(unsigned long value, unsigned long valueMax = 0)
 {
 	if (value < minInterval)
 	{
@@ -43,7 +43,7 @@ void DS18B20Events::setInterval(unsigned long value, unsigned long valueMax)
 	}
 	else
 	{
-		intervalMillisMax = value + minInterval;
+		intervalMillisMax = value + minInterval * 1000;
 	}
 };
 
