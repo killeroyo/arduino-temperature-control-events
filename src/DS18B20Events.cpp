@@ -88,9 +88,9 @@ void DS18B20Events::loop(void) {
 			{
 				onChange(_index, currentTempC);
 			}
+			lastMillisGet = currentMillis;
 		}
 
 		lastTempC = currentTempC;
-		lastMillisGet = currentMillis;
 	}	
 }
