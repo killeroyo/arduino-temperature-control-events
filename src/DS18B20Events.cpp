@@ -1,6 +1,7 @@
 #include "DS18B20Events.h"
 
 static unsigned long intervalMillis;
+static unsigned long intervalMillisMax;
 static unsigned long lastMillisRequest;
 static DallasTemperature* _sensors;
 
@@ -25,7 +26,7 @@ uint8_t DS18B20Events::getIndex()
 {
 	return _index;
 }
-void DS18B20Events::setInterval(unsigned long value)
+void DS18B20Events::setInterval(unsigned long value, unsigned long valueMax)
 {
 	if (value < minInterval)
 	{
@@ -34,6 +35,15 @@ void DS18B20Events::setInterval(unsigned long value)
 	else
 	{
 		intervalMillis = value;
+	}
+	
+	if (valueMax > value)
+	{
+		intervalMillisMax = valueMax;
+	}
+	else
+	{
+		intervalMillisMax = value + minInterval;
 	}
 };
 
@@ -66,7 +76,7 @@ void DS18B20Events::loop(void) {
 #endif
 		currentTempC = _sensors->getTempCByIndex(_index);
 
-		if (currentTempC != lastTempC)
+		if (currentTempC != lastTempC || currentMillis - lastMillisGet >= intervalMillisMax)
 		{
 #if _DEBUG
 			Serial.print("DEBUG ");
