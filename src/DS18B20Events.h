@@ -22,7 +22,7 @@ public:
 	changeHandler onChange = nullptr;
 	void loop(void);
 
-	static void setInterval(unsigned long value);
+	static void setInterval(unsigned long value, unsigned long valueMax);
 	static  void setup(DallasTemperature* sensors);
 
 private:
