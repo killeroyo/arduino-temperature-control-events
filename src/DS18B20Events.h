@@ -32,6 +32,7 @@ private:
 	float currentTempC = -127.0f;
 	float lastTempC = -127.0f;
 	unsigned long lastMillisGet;
+	unsigned long lastMillisCB;
 	unsigned long currentMillis;
 };
 
