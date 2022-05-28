@@ -74,9 +74,7 @@ void DS18B20Events::loop(void) {
 		Serial.print("Get temperature at ");
 		Serial.println(_index);
 #endif
-		// precision to 1 digit
-		int t = _sensors->getTempCByIndex(_index) * 10;
-		currentTempC = t / 10;
+		currentTempC = _sensors->getTempCByIndex(_index);
 
 		if (currentTempC != lastTempC || currentMillis - lastMillisGet >= intervalMillisMax)
 		{
