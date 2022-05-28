@@ -28,32 +28,22 @@ uint8_t DS18B20Events::getIndex()
 }
 void DS18B20Events::setInterval(unsigned long value, unsigned long valueMax)
 {
-	if (value < minInterval)
-	{
-		intervalMillis = minInterval;
-	}
-	else
-	{
-		intervalMillis = value;
-	}
+	if (value < minInterval) { intervalMillis = minInterval; }
+	else { intervalMillis = value; }
 	
-	if (valueMax > value)
-	{
-		intervalMillisMax = valueMax;
-	}
-	else
-	{
-		intervalMillisMax = value + minInterval * 1000;
-	}
+	if (valueMax > value) { intervalMillisMax = valueMax; }
+	else { intervalMillisMax = value + minInterval * 1000; }
 };
 
-void DS18B20Events::setup(DallasTemperature* sensors) {
-#if _DEBUG
-	Serial.println("Setup Thermometer");
-#endif
+void DS18B20Events::setup(DallasTemperature* sensors)
+{
+	#if _DEBUG
+		Serial.println("Setup Thermometer");
+	#endif
 	_sensors = sensors;
 	_sensors->begin();
 	intervalMillis = 10000; // default interval
+	intervalMillisMax = 10000000; // default max interval
 };
 
 void DS18B20Events::loop(void) {
@@ -61,36 +51,34 @@ void DS18B20Events::loop(void) {
 
 	if (currentMillis - lastMillisRequest >= intervalMillis || lastMillisRequest == 0)
 	{
-#if _DEBUG
-		Serial.println("Requesting temperature ");
-#endif
+		#if _DEBUG
+			Serial.println("Requesting temperature ");
+		#endif
 		_sensors->requestTemperatures();
 		lastMillisRequest = currentMillis;
 	}
 
 	if (currentMillis - lastMillisGet >= intervalMillis || lastMillisGet == 0)
 	{
-#if _DEBUG
-		Serial.print("Get temperature at ");
-		Serial.println(_index);
-#endif
+		#if _DEBUG
+			Serial.print("Get temperature at ");
+			Serial.println(_index);
+		#endif
 		currentTempC = _sensors->getTempCByIndex(_index);
 
-		if (currentTempC != lastTempC || currentMillis - lastMillisGet >= intervalMillisMax)
+		if (currentTempC != lastTempC || currentMillis - lastMillisCB >= intervalMillisMax)
 		{
-#if _DEBUG
-			Serial.print("DEBUG ");
-			Serial.print(currentTempC);
-			Serial.print(" new TempC at ");
-			Serial.println(_index);
-#endif			
-			if (onChange != nullptr)
-			{
-				onChange(_index, currentTempC);
-			}
-			lastMillisGet = currentMillis;
-		}
+			#if _DEBUG
+				Serial.print("DEBUG ");
+				Serial.print(currentTempC);
+				Serial.print(" new TempC at ");
+				Serial.println(_index);
+			#endif	
 
+			if (onChange != nullptr) { onChange(_index, currentTempC); }
+			lastMillisCB = currentMillis;
+		}
+		lastMillisGet = currentMillis;
 		lastTempC = currentTempC;
 	}	
 }
